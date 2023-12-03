@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import *
+from math import pow, sqrt
 
 class Main(QDialog):
     def __init__(self):
@@ -66,8 +67,12 @@ class Main(QDialog):
         button_square_root = QPushButton("√x")
 
         ### =, clear, backspace 버튼 클릭 시 시그널 설정
-        
+        button_mod.clicked.connect(lambda state, operation = "%": self.button_operation_clicked(operation))
+        button_clear_CE.clicked.connect(self.button_clear_clicked)
         button_clear_C.clicked.connect(self.button_clear_clicked)
+        button_inverse.clicked.connect(self.button_inverse_clicked)
+        button_square.clicked.connect(self.button_square_clicked)
+        button_square_root.clicked.connect(self.button_square_root_clicked)
 
         ### =, clear, backspace 버튼을 layout_clear_equal 레이아웃에 추가
         layout_clear_equal.addWidget(button_mod, 0, 0)
@@ -143,6 +148,29 @@ class Main(QDialog):
         equation = self.equation.text()
         equation = equation[:-1]
         self.equation.setText(equation)
+
+    def button_inverse_clicked(self): # equation의 수를 1에서 나누면 됨
+        equation = self.equation.text()
+        self.equation.setText(str(float(eval("1/"+equation))))
+
+    def button_square_clicked(self): 
+        equation = self.equation.text()
+        if "." in equation:
+            self.equation.setText(str(pow(float(equation), 2)))
+        else:
+            self.equation.setText(str(int(pow(int(equation), 2))))
+
+    def button_square_root_clicked(self):
+        equation = self.equation.text()
+        if "." in equation:
+            self.equation.setText(str(sqrt(float(equation))))
+        else:
+            self.equation.setText(str(int(pow(int(equation), 2))))
+            self.equation.setText(str(int(sqrt(int(equation)))))
+
+    def button_sign_shift_clicked(self):
+        equation = int(self.equation.text())
+        self.equation.setText(str(-equation))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
