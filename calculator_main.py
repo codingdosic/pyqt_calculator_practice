@@ -5,6 +5,7 @@ class Main(QDialog):
     def __init__(self):
         super().__init__()
         self.init_ui()
+        self.buffer = ""
 
     def init_ui(self):
         main_layout = QVBoxLayout()
@@ -125,14 +126,18 @@ class Main(QDialog):
     def button_operation_clicked(self, operation):
         equation = self.equation.text()
         equation += operation
-        self.equation.setText(equation)
+        self.buffer = equation
+        self.equation.setText("")
 
     def button_equal_clicked(self):
-        equation = self.equation.text()
-        self.equation.setText(str(eval(equation)))
+        self.buffer += self.equation.text()
+        solution = eval(self.buffer)
+        self.equation.setText(str(solution))
+        self.buffer = ""
 
     def button_clear_clicked(self):
         self.equation.setText("")
+        self.buffer = ""
 
     def button_backspace_clicked(self):
         equation = self.equation.text()
